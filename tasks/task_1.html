@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zxx">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Задача 1</title>
+  </head>
+
+  <body>
+    <h1>Задача 1</h1>
+    <p>
+      Створити клас, що дозволяє виконувати такі операції над масивами:
+      знаходження кількості додатних, кількості від’ємних, кількість входжень
+      деякого числа (статичні методи)
+    </p>
+    <script>
+      class arrey {
+        static getPositiveNumber(arr) {
+          return arr.reduce((el, num) => (num > 0 ? ++el : el), 0)
+        }
+        static getNegativeNumber(arr) {
+          return arr.reduce((el, num) => (num < 0 ? ++el : el), 0)
+        }
+        static getNumber(arr, number) {
+          return arr.reduce((count, el) => (el === number ? ++count : count), 0)
+        }
+      }
+      let arr = [6, 4, -8, 1, 9, 6, -4, -5, 1, 7, 4, 7, -9]
+      console.log(arrey.getPositiveNumber(arr))
+      console.log(arrey.getNegativeNumber(arr))
+      console.log(arrey.getNumber(arr, 4))
+    </script>
+  </body>
+</html>

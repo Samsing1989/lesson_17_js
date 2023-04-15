@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zxx">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Задача 5</title>
+  </head>
+
+  <body>
+    <h1>Задача 5</h1>
+
+    <p>
+      Особиста бібліотека. Картотека домашньої бібліотеки: дані книги (автори
+      (піб, рік народження, короткий опис), назва книги, жанр, видавництво
+      (назва, реєстраційний номер, рік засування)). Реалізувати розділи
+      бібліотеки (спеціальна література, хобі, домашнє господарство і т.д.),
+      походження книги і наявність на даний час. Організувати
+      додавання/вилучення книг та вибір книг за назвою, за ПІБ автора, за
+      видавництвом.
+    </p>
+    <script>
+      class Autor {
+        constructor(initData) {
+          Object.assign(this, initData)
+        }
+        toString() {
+          return `${this.name}, ${this.yearOfBirth}, ${this.briefDescription}`
+        }
+      }
+      class PublishingHouse {
+        constructor(initData) {
+          Object.assign(this, initData)
+        }
+        toString() {
+          return `${this.nameBook}, ${this.registrationNumber}, ${this.yearOfIntroduction}`
+        }
+      }
+      class PartitionsLibraries {
+        constructor(initData) {
+          Object.assign(this, initData)
+          this.partitionsLibraries = {}
+        }
+        toString() {
+          return `${this.title}}`
+        }
+      }
+      class Book {
+        static count = 0
+        constructor(initData) {
+          Object.assign(this, initData)
+          this.registrationNumber = ++Book.count
+        }
+        toString() {
+          return ` <br>
+                            реєстраційний номер - ${this.registrationNumber}<br>
+                            автори - ${this.author}<br>
+                            назва - ${this.title}<br>
+                            жанр - ${this.genre}<br>
+                            видавництво	- ${this.publishing}<br>
+                           розділ в бібліотеці - ${this.partitionsLibraries}<br>
+                            походження - ${this.origin}<br>
+                        	 доступний - ${this.available}<br>
+                            `
+        }
+      }
+      class Library {
+        static objLibrary
+        constructor() {
+          if (Library.objLibrary) return Library.objLibrary
+          this.bookList = []
+          Library.objLibrary = this
+        }
+        addBooks(book) {
+          this.bookList.push(book)
+        }
+        removeBooks(libraryBook) {
+          this.bookList = this.bookList.filter(
+            (book) => book.registrationNumber !== libraryBook
+          )
+        }
+        takeBook(libraryBook, whoTask) {
+          let book = this.bookList.find(
+            (book) => book.registrationNumber === libraryBook
+          )
+        }
+        takeOfTitleBook(title) {
+          let listBook = this.bookList.filter((book) => book.title === title)
+          return listBook.length ? listBook : `Такої книги немає`
+        }
+        takeOfAuthorBook(search) {
+          let listBook = []
+          for (const book of bookList) {
+            for (const author of book.author) {
+              if (author.name === search) listBook.push(book)
+            }
+          }
+          return listBook.length ? libraryBook : `З таким автором книги немає`
+        }
+        takeOfPoblisherBook(search) {
+          let listBook = this.bookList.filter(
+            (book) => book.PublishingHouse === search
+          )
+          return listBook.length
+            ? listBook
+            : `Такої книги за видавництвом немає`
+        }
+        toString() {
+          return `${this.bookList}`
+        }
+      }
+      let liber = new Library()
+
+      liber.addBooks(
+        new Book({
+          author: [
+            new Autor({
+              name: "Лоран Гунель",
+              yearOfBirth: 1966,
+              briefDescription: "вивчення психології",
+            }),
+          ],
+          title: "День, що навчив мене жити",
+          genre: "мотивація",
+          publishing: new PublishingHouse({
+            nameBook: "Клуб Сімейного Дозвілля",
+            registrationNumber: "4128816",
+            yearOfIntroduction: 2019,
+          }),
+          partitionsLibraries: new PartitionsLibraries({ title: "Психологія" }),
+          origin: "купити",
+          available: "є в наявності",
+        })
+      )
+      liber.addBooks(
+        new Book({
+          author: [
+            new Autor({
+              name: "Стівен Кові",
+              yearOfBirth: 1932,
+              briefDescription:
+                " бізнес-консультант, експерт з особистого розвитку",
+            }),
+          ],
+          title: "7 звичок надзвичайно ефективних людей",
+          genre: "психологія",
+          publishing: new PublishingHouse({
+            nameBook: "Клуб Сімейного Дозвілля",
+            registrationNumber: "412346",
+            yearOfIntroduction: 2014,
+          }),
+          partitionsLibraries: new PartitionsLibraries({ title: "психологія" }),
+          origin: "купити",
+          available: "є в наявності",
+        })
+      )
+      liber.addBooks(
+        new Book({
+          author: [
+            new Autor({
+              name: "	Артемій Сурін",
+              yearOfBirth: 1970,
+              briefDescription: "Бізнесмен, блогер, телеведучий",
+            }),
+          ],
+          title: "280 днів навколо світу. Історія однієї мрії. Том 1",
+          genre: "	Спорт. Бойові мистецтва. Танці",
+          publishing: new PublishingHouse({
+            nameBook: "	BookChef",
+            registrationNumber: "412306",
+            yearOfIntroduction: 2021,
+          }),
+          partitionsLibraries: new PartitionsLibraries({
+            title: "Популярна психологія",
+          }),
+          origin: "купити",
+          available: "є в наявності",
+        })
+      )
+
+      liber.takeBook(2, "Vasya 15/04/23")
+      console.log(liber.takeOfPoblisherBook("fghsjy"))
+
+      console.log(liber.bookList)
+      document.write(`${liber}`)
+    </script>
+  </body>
+</html>

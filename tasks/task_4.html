@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zxx">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Задача 4</title>
+  </head>
+
+  <body>
+    <h1>Задача 4</h1>
+    <p>
+      Склад. База товарів, які зберігаються на складі: назва товару, одиниця
+      виміру, кількість, фірма виробник (назва, реєстраційний номер).
+      Організувати реєстрацію/відвантаження товарів, фільтрація за назвою
+      товару, фільтрація за назвою фірми
+    </p>
+
+    <script>
+      class Manufacturer {
+        static count = 0
+        constructor(nameCompany, numReg) {
+          this.nameCompany = nameCompany
+          this.numReg = ++Manufacturer.count
+        }
+        toString() {
+          return `Назва виробника - ${this.nameCompany}, реєстраційний номер - ${this.numReg}}`
+        }
+      }
+      class ProductManufacturer {
+        #number
+        constructor(title, unitMeasurement, number, producer) {
+          this.title = title
+          this.unitMeasurement = unitMeasurement
+          this.number = number
+          this.producer = new Manufacturer(producer)
+        }
+        get number() {
+          return this.#number
+        }
+        set number(val) {
+          if (val < 0)
+            throw new Error(
+              `Є в наявності ${this.number} ${this.unitMeasurement}`
+            )
+          this.#number = val
+        }
+        increaseNum(val) {
+          this.Number += val
+        }
+        decreseaseNum(val) {
+          this.Number -= val
+        }
+        toString() {
+          return `
+			 <br>
+              ${this.title}
+
+              ${this.number}
+				   ${this.unitMeasurement}
+              ${this.producer}
+              `
+        }
+      }
+      class Products {
+        static objProduct
+        constructor() {
+          if (Products.objProduct) return Products.objProduct
+          this.prodList = []
+          Products.objProduct = this
+        }
+        isProduct(title, producer) {
+          if (this.prodList.length)
+            return this.prodList.find(
+              (product) =>
+                product.title === title &&
+                product.producer.nameCompany === producer
+            )
+          return false
+        }
+        regisProd(newProd) {
+          let product = this.isProduct(
+            newProd.title,
+            newProd.producer.nameCompany
+          )
+          if (product) product.increaseNum(newProd.Number)
+          else this.prodList.push(newProd)
+        }
+        shipmentProd(title, number, producer) {
+          let product = this.isProduct(title, producer)
+
+          if (producer) product.decreseaseNum(number)
+          else throw new Error("Не товару")
+        }
+        searchProdTitle(title) {
+          let prodList = this.prodList.filter(
+            (product) => product.title === title
+          )
+          return prodList.length ? prodList : "Не товару"
+        }
+        searchProdName(name) {
+          let prodList = this.prodList.filter(
+            (product) => product.producer.nameCompany === name
+          )
+          return prodList.length ? prodList : "Не товару"
+        }
+        toString() {
+          return `${this.prodList}`
+        }
+      }
+      let produc = new Products()
+
+      produc.regisProd(new ProductManufacturer("Протеїн", "кг", 1.3, "Польща"))
+      produc.regisProd(new ProductManufacturer("Казіїн", "кг", 2.1, "США"))
+      produc.regisProd(new ProductManufacturer("Креатін", "кг", 0.5, "США"))
+      produc.regisProd(new ProductManufacturer("Протеїн", "кг", 2, "Угорщина"))
+
+      produc.shipmentProd("Протеїн", 1, "Польща")
+
+      console.log(produc.searchProdTitle("Казіїн"))
+      console.log(produc.searchProdName("США"))
+
+      document.write(`${produc}<br>`)
+    </script>
+  </body>
+</html>

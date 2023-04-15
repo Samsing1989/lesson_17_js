@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zxx">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Задача 6</title>
+  </head>
+
+  <body>
+    <h1>Задача 6</h1>
+    <p>
+      Дано два класи MultChecker (клас для перевірки таблиці множення - рандомно
+      генеруються числа, які треба перемножати), AddChecker (клас для перевірки
+      додавання - рандомно генеруються числа у заданому діапазоні, які треба
+      додавати). Обидва класи надсилають результати тестування об'єкту класу
+      Hystory, який зберігає історію тестування у масиві у вигляді об'єктів
+      Приклад. testsList= [ {firstNum:1, secondNum:5,opration:’*’, userAnswer:7,
+      correctAnswer:5}, {firstNum:3, secondNum:4,opration:’+’, userAnswer:7,
+      correctAnswer:7}, ] Можна створити окремий клас TestData, який описує один
+      такий тест і у якому будуть ці поля. Розробити клас TestManager, який
+      використовуючи ці класи за допомогою таймера періодично генерує якісь N
+      задач (рандомно вибираємо, що опитувати: додавання чи множення) і
+      проводить опитування. Результати тестування додаються в об’єкт History.
+      Зробити так, щоб об'єкт такого класу можна було створити тільки один. Коли
+      зроблено ці N задач вивести усю історію на екран.
+    </p>
+    <script>
+      class MultChecker {
+        constructor(minValue, MaxValue) {
+          this.firstNumber = MultChecker.getRandomNumber(minValue, MaxValue)
+          this.secondNumber = MultChecker.getRandomNumber(minValue, MaxValue)
+          this.opration = "*"
+          this.userAnswer = this.getUserAnswer()
+          this.correctAnswer = this.getCorrectAnswer()
+        }
+        static getRandomNumber(minValue, MaxValue) {
+          return (
+            minValue + Math.floor(Math.random() * (MaxValue - minValue + 1))
+          )
+        }
+        getUserAnswer() {
+          return parseInt(
+            prompt(`${this.firstNumber} * ${this.secondNumber} = `)
+          )
+        }
+        getCorrectAnswer() {
+          return this.firstNumber * this.secondNumber
+        }
+        toString() {
+          return `${this.firstNumber}, ${this.secondNumber}, ${this.opration}, ${this.userAnswer}, ${this.correctAnswer}`
+        }
+      }
+      class AddChecker {
+        constructor(minValue, MaxValue) {
+          this.firstNumber = MultChecker.getRandomNumber(minValue, MaxValue)
+          this.secondNumber = MultChecker.getRandomNumber(minValue, MaxValue)
+          this.opration = "+"
+          this.userAnswer = this.getUserAnswer()
+          this.correctAnswer = this.getCorrectAnswer()
+        }
+        static getRandomNumber(minValue, MaxValue) {
+          return (
+            minValue + Math.floor(Math.random() + (MaxValue - minValue + 1))
+          )
+        }
+        getUserAnswer() {
+          return parseInt(
+            prompt(`${this.firstNumber} + ${this.secondNumber} =`)
+          )
+        }
+        getCorrectAnswer() {
+          return this.firstNumber + this.secondNumber
+        }
+        toString() {
+          return `${this.firstNumber}, ${this.secondNumber}, ${this.opration}, ${this.userAnswer}, ${this.correctAnswer}`
+        }
+      }
+      class TestManager {
+        static minGenerates = 1
+        static maxGenerates = 10
+        static minValue = 1
+        static MaxValue = 5
+        static getRandomGenerates() {
+          return (
+            TestManager.minGenerates +
+            Math.floor(Math.random() * TestManager.maxGenerates)
+          )
+        }
+        static getRandTask() {
+          let task =
+            TestManager.minValue +
+            Math.floor(Math.random() * TestManager.MaxValue)
+          if (task === 1) return new MultChecker(1, 10)
+          else return new AddChecker(1, 10)
+        }
+        static getTime(Value) {
+          let arr = []
+          let result
+          for (let i = 0; i < Value; i++) {
+            setTimeout(() => {
+              result = TestManager.getRandTask()
+              document.write(`${JSON.stringify(result)}<br>`)
+              arr.push(result)
+            }, TestManager.getRandomGenerates() * 2000)
+          }
+          return arr
+        }
+      }
+      class History {
+        static objectHist
+        constructor(Value) {
+          if (History.objectHist) return History.objectHist
+          this.arrHist = TestManager.getTime(Value)
+          History.objectHist = this
+        }
+      }
+      let histFirst = new History(5)
+      let histSecond = new History(3)
+
+      console.log(histSecond)
+      console.log(histFirst)
+    </script>
+  </body>
+</html>
